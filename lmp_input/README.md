@@ -1,3 +1,2 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:676ae5ea51bcb5d917225835da92cf5d0072ec0c5a2ec21d790c9458fde6a2c6
-size 278
+This includes the LAMMPS input file (ffield.reax.PBO, in.PBO,lmp_conctol, and param.qeq) and its initial topology(data).
+If you want to reproduce the results, you need to use ffield.reax.PBO, in.PBO, lmp_conctol, param.qeq, and pbo.data in the same directory to submit the job.
