@@ -1,1 +1,1 @@
-This includes the coordinates of reactants, intermediate products, and final products in the PBO degradation process, the LAMMPS input file, and the code for the machine learning model to predict UV absorption spectra.
+This includes the LAMMPS input file, and the code for the machine learning model to predict UV absorption spectra.
