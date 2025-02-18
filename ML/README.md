@@ -1,3 +1,13 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2da5f6c2dca74278b24a27f264fbdcd9ed64a3bc4fba371eb2502015772f7f67
-size 442
+This includes machine learning code, input files, and output files.
+
+
+The file named morgan_fingerprints9199.csv is a 1024 bit morgan fingerprint converted from smiles.
+
+
+The file named predictions9199.txt contains the data of UV visible absorption spectra predicted by the model.
+
+
+The file named transformer_uvvis_pred.ipynb called jupyter notebook file.
+
+
+The file named tf_uv.pth is the model with the best performance after grid search.
