@@ -1,3 +1,102 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2f0915d14b8c4b5811c2ad57aa877f736370c6d2e0f9b48bc2ddee2a23bddcd8
-size 2057
+# REAX potential for CHO system
+# .....
+#restart 1000 tmp.restart
+
+units		real
+boundary 	p p p 
+atom_style	charge #原子类型
+timestep	0.25   #步长
+neighbor	2 bin  #邻居列表
+neigh_modify	every 10 delay 0 check yes
+
+
+#data
+read_data	pbo.data
+
+
+#ff
+pair_style	    reax/c lmp_control lgvdw yes
+#pair_style      reax/c NULL lgvdw yes
+pair_coeff	* * ffield.reax.PBO C H O N
+
+
+#nve qeq
+fix	nve all nve
+fix            qeq all qeq/reax 1 0.0 10.0 1e-6 reax/c  
+fix    3 all temp/berendsen 298.15 298.15 100.0
+dump	nve all atom 30 nve.lammpstrj
+run		3000
+undump    nve
+reset_timestep  0
+
+
+#em
+thermo    100   
+dump    em all atom 100 em.lammpstrj 
+minimize  1e-15 1e-15 5000 5000 
+unfix   nve
+undump    em 
+reset_timestep  0 
+
+
+velocity  all create 298.15 321456 rot yes dist gaussian 
+
+ #n1
+thermo    100
+thermo_style  custom step press pe temp ke
+dump    n1 all atom 100 n1.lammpstrj
+fix   n1 all npt temp 298.15 600 25 tri 1 1 250
+run   40000
+unfix   n1
+undump   n1
+reset_timestep 0
+write_restart restart.n1
+
+#n2
+thermo    100
+thermo_style  custom step press pe temp ke
+dump    n2 all atom 100 n2.lammpstrj
+fix   n2 all npt temp 600 600 25 tri 1 1 250
+run   40000
+unfix   n2
+undump   n2
+reset_timestep 0
+write_restart restart.n2
+
+#n3
+thermo    100
+thermo_style  custom step press pe temp ke
+dump    n3 all atom 100 n3.lammpstrj
+fix   n3 all npt temp 600 298.15 25 tri 1 1 250
+run   40000
+unfix   n3
+undump   n3
+reset_timestep 0
+write_restart restart.n3
+
+#npt0
+thermo    100
+thermo_style  custom step press pe temp ke
+dump    npt0 all atom 100 npt0.lammpstrj
+fix   npt0 all npt temp 298.15 298.15 25 tri 1 1 250
+run   500000
+unfix   npt0 
+undump   npt0
+reset_timestep 0
+write_restart restart.npt0
+
+#npt
+thermo    1
+thermo_style  custom step press pe temp ke lx pxx
+dump    npt all atom 100 npt.lammpstrj
+fix   npt all npt temp 298.15 298.15 25 y 1 1 250 z 1 1 250 xy 0.0 0.0 250 xz 0.0 0.0 250 yz 0.0 0.0 250 couple none
+fix             bonds all reax/c/bonds 100 bonds.reaxff
+
+#draw
+fix   draw all deform 10000 x scale 1.25 units box  
+run   1000000
+
+
+
+
+
